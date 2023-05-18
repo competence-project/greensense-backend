@@ -30,6 +30,7 @@ class MQTTDbConn(threading.Thread):
         self.client.on_message = self.on_message
         self.client.on_publish = self.on_publish
         self.client.connect(self.ipAddr, self.port, 60)
+        print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topics dev/#...")
         for topic in self.topics:
             self.client.subscribe(topic, 0)
         while self.client.loop() == 0:
@@ -42,6 +43,7 @@ class MQTTDbConn(threading.Thread):
         # self.printLogs()
         # print('')
 
+        #topic standard is dev/{mac}/{type}/{id} so after split should be [0]=dev [1]=mac [2]=type [3]=id
         topicTokens = msg.topic.split('/')
         self.saveMqttLog(topicTokens[1], topicTokens[2], topicTokens[3], float(util.convertBytesToString(msg.payload)))
 
@@ -53,6 +55,9 @@ class MQTTDbConn(threading.Thread):
 
     def getAllDataForSensor(self, mac_addr):
         return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}'")
+
+    def getSubSensorsIdsByMacAddressAndType(self, mac_addr, type):
+        return self.dbConn.executeSQL(f"SELECT DISTINCT sensor_id FROM mqtt_logs WHERE mac_addr='{mac_addr}' and type='{type}'")
 
     def getAllDataTest(self):
         return self.dbConn.executeSQL("SELECT * FROM mqtt_logs")
