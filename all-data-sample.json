@@ -1,0 +1,144 @@
+[
+    {
+        "datetime": {
+            "from": 1683533226,
+            "to": 1684448182,
+            "timezone_offset": 7200
+        },
+        "sensor": {
+            "mac_address": "1234"
+        },
+        "data": [
+            {
+                "name": "temp",
+                "id": 1,
+                "measurement_list": [
+                    {
+                        "datetime": 1683533226,
+                        "result": 69.69
+                    },
+                    {
+                        "datetime": 1683533231,
+                        "result": 420.42
+                    },
+                    {
+                        "datetime": 1683533234,
+                        "result": 21.37
+                    },
+                    {
+                        "datetime": 1683541567,
+                        "result": 21.37
+                    }
+                ]
+            },
+            {
+                "name": "temp",
+                "id": 2,
+                "measurement_list": [
+                    {
+                        "datetime": 1683541578,
+                        "result": 69.96
+                    }
+                ]
+            },
+            {
+                "name": "lum",
+                "id": 1,
+                "measurement_list": [
+                    {
+                        "datetime": 1684445910,
+                        "result": 21.3769
+                    },
+                    {
+                        "datetime": 1684448182,
+                        "result": 21.3769
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "datetime": {
+            "from": 1684445393,
+            "to": 1684445522,
+            "timezone_offset": 7200
+        },
+        "sensor": {
+            "mac_address": "123456"
+        },
+        "data": [
+            {
+                "name": "lum",
+                "id": 1,
+                "measurement_list": [
+                    {
+                        "datetime": 1684445393,
+                        "result": 21.3769
+                    },
+                    {
+                        "datetime": 1684445522,
+                        "result": 21.3769
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "datetime": {
+            "from": 1683533220,
+            "to": 1683540491,
+            "timezone_offset": 7200
+        },
+        "sensor": {
+            "mac_address": "1235"
+        },
+        "data": [
+            {
+                "name": "temp",
+                "id": 1,
+                "measurement_list": [
+                    {
+                        "datetime": 1683533220,
+                        "result": 123.0
+                    },
+                    {
+                        "datetime": 1683540491,
+                        "result": 789654.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "datetime": {
+            "from": 1683533213,
+            "to": 1683533217,
+            "timezone_offset": 7200
+        },
+        "sensor": {
+            "mac_address": "1236"
+        },
+        "data": [
+            {
+                "name": "temp",
+                "id": 2,
+                "measurement_list": [
+                    {
+                        "datetime": 1683533213,
+                        "result": 23.0
+                    }
+                ]
+            },
+            {
+                "name": "temp",
+                "id": 1,
+                "measurement_list": [
+                    {
+                        "datetime": 1683533217,
+                        "result": 23.23
+                    }
+                ]
+            }
+        ]
+    }
+]
