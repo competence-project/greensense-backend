@@ -46,7 +46,6 @@ class MQTTDbConn(threading.Thread):
         #topic standard is dev/{mac}/{type}/{id} so after split should be [0]=dev [1]=mac [2]=type [3]=id
         topicTokens = msg.topic.split('/')
         #LE ERRORHANDLINGO
-        print(topicTokens)
         if len(topicTokens) != 4 or topicTokens[2] == "cmd":
             return
         try:
