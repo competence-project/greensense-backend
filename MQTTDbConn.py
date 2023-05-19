@@ -45,7 +45,13 @@ class MQTTDbConn(threading.Thread):
 
         #topic standard is dev/{mac}/{type}/{id} so after split should be [0]=dev [1]=mac [2]=type [3]=id
         topicTokens = msg.topic.split('/')
-        self.saveMqttLog(topicTokens[1], topicTokens[2], topicTokens[3], float(util.convertBytesToString(msg.payload)))
+        #LE ERRORHANDLINGO
+        if len(topicTokens) != 4:
+            pass
+        try:
+            self.saveMqttLog(topicTokens[1], topicTokens[2], topicTokens[3], float(util.convertBytesToString(msg.payload)))
+        except:
+            print("Error converting data")
 
     def on_publish(self, mosq, obj, mid):
         pass

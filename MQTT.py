@@ -17,16 +17,17 @@ class MQTTData(BaseModel):
 
 if __name__ == "__main__":
     #TODO: list with valid types used in our system
-    types = ['temp', 'lum']
+    types = ['temp', 'illum']
 
-    #loopback
+    # loopback
     # mqttClient = MQTTDbConn("testdb", "127.0.0.1", 1883, "dev/#")
-    #at my own place
-    mqttClient = MQTTDbConn("testdb", "192.168.100.10", 1883, "dev/#")
+    # at my own place
+    # mqttClient = MQTTDbConn("testdb", "192.168.100.10", 1883, "dev/#")
+    # at school
+    mqttClient = MQTTDbConn("testdb", "10.1.4.168", 1883, "dev/#")
     mqttClient.start()
 
     app = FastAPI()
-
     #sample, test endpoint
     @app.get("/")
     async def root():
