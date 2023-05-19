@@ -61,7 +61,7 @@ if __name__ == "__main__":
             tmp_dict = {'datetime': {'from': mac[1], 'to': mac[2], 'timezone_offset': 7200}, 'sensor': {"mac_address": mac[0]}}
             data = []
             for measurementType in types:
-                #gathering distinct ids of sub-sensors cuz only cursor can be opened at once
+                #gathering distinct ids of sub-sensors cuz only one cursor can be opened at once
                 ids = []
                 for idTuple in mqttClient.getSubSensorsIdsByMacAddressAndType(mac[0], measurementType):
                     ids.append(idTuple[0])
