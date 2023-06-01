@@ -8,7 +8,7 @@ import time
 # dev/{mac}/{type}/{id} - wiadomosc od urządzeń
 # msg i w body polecenie
 
-# suboskrybowanie wildcarda dev/#
+# subskrybowanie wildcarda dev/+/+/+
 
 # # - multi level wildcard
 # + - single level wildcard
