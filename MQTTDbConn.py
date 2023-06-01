@@ -49,6 +49,12 @@ class MQTTDbConn(threading.Thread):
     def getUniqueMacAddresses(self):
         return self.dbConn.executeSQL("SELECT DISTINCT mac_addr, min(timestamp), max(timestamp) FROM mqtt_logs GROUP BY mac_addr")
 
+    def getTimestampsForMacAddress(self, mac_address):
+        return self.dbConn.executeSQL(f"SELECT DISTINCT mac_addr, min(timestamp), max(timestamp) FROM mqtt_logs WHERE mac_addr='{mac_address}' GROUP BY mac_addr")
+
+    def getTimestampsForMacAddressAndType(self, mac_address, provided_type):
+        return self.dbConn.executeSQL(f"SELECT DISTINCT mac_addr, min(timestamp), max(timestamp) FROM mqtt_logs WHERE mac_addr='{mac_address}' and type='{provided_type}' GROUP BY mac_addr ")
+
     def getAllDataByType(self, type):
         return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE type = '{type}'")
 
@@ -61,7 +67,7 @@ class MQTTDbConn(threading.Thread):
     def getDataByMacTypeAndSensorID(self, mac_addr, type, sensorID):
         return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}' and type='{type}' and id='{sensorID}'")
 
-    def getDataByMac(self, mac_addr):
+    def getDataByMacAddress(self, mac_addr):
         return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}'")
 
     def getSubSensorsIdsByMacAddressAndType(self, mac_addr, type):
