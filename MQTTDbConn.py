@@ -1,7 +1,6 @@
 import paho.mqtt.client as paho
 import DbConnection as Db
 import threading
-import util
 import time
 
 
@@ -14,7 +13,7 @@ import time
 # + - single level wildcard
 
 # no i zapis do bazki mac - adres mac urządzenia, type - jakis predefiniowany typ, id
-# create table mqtt_logs (log_id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, mac_addr TEXT NOT NULL, type TEXT, sensor_id INTEGER, reading REAL NOT NULL)
+# create table mqtt_logs (log_id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, mac_addr TEXT NOT NULL, type TEXT, sensor_id INTEGER, reading TEXT NOT NULL)
 
 class MQTTDbConn(threading.Thread):
     def __init__(self, dbname, ipAddr, port, topics):
@@ -37,21 +36,12 @@ class MQTTDbConn(threading.Thread):
             pass
 
     def on_message(self, mosq, obj, msg):
-        # print("%-20s %d %s" % (msg.topic, msg.qos, msg.payload))
-        # mosq.publish('pong', 'ack', 0)
-        # print("===== ALL DATA STORED IN THE DATABASE: =====")
-        # self.printLogs()
-        # print('')
-
-        #topic standard is dev/{mac}/{type}/{id} so after split should be [0]=dev [1]=mac [2]=type [3]=id
+        # topic standard is dev/{mac}/{type}/{id} so after split should be [0]=dev [1]=mac [2]=type [3]=id
         topicTokens = msg.topic.split('/')
-        #LE ERRORHANDLINGO
-        if len(topicTokens) != 4 or topicTokens[2] == "cmd":
+        if len(topicTokens) != 4 or topicTokens[2] == "cmd" or topicTokens[3] == 'num':
             return
-        try:
-            self.saveMqttLog(topicTokens[1], topicTokens[2], topicTokens[3], float(util.convertBytesToString(msg.payload)))
-        except:
-            print("Error converting data")
+        # payload is a string
+        self.saveMqttLog(topicTokens[1], topicTokens[2], topicTokens[3], msg.payload)
 
     def on_publish(self, mosq, obj, mid):
         pass
