@@ -29,7 +29,7 @@ class MQTTDbConn(threading.Thread):
         self.client.on_message = self.on_message
         self.client.on_publish = self.on_publish
         self.client.connect(self.ipAddr, self.port, 60)
-        print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topics dev/#...")
+        print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topics dev/+/+/+...")
         for topic in self.topics:
             self.client.subscribe(topic, 0)
         while self.client.loop() == 0:
@@ -49,20 +49,26 @@ class MQTTDbConn(threading.Thread):
     def getUniqueMacAddresses(self):
         return self.dbConn.executeSQL("SELECT DISTINCT mac_addr, min(timestamp), max(timestamp) FROM mqtt_logs GROUP BY mac_addr")
 
-    def getAllDataForSensor(self, mac_addr):
+    def getAllDataByType(self, type):
+        return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE type = '{type}'")
+
+    def getAllDataByMac(self, mac_addr):
+        return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}'")
+
+    def getDataByMacAndType(self, mac_addr, type):
+        return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}' and type='{type}'")
+
+    def getDataByMacTypeAndSensorID(self, mac_addr, type, sensorID):
+        return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}' and type='{type}' and id='{sensorID}'")
+
+    def getDataByMac(self, mac_addr):
         return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}'")
 
     def getSubSensorsIdsByMacAddressAndType(self, mac_addr, type):
         return self.dbConn.executeSQL(f"SELECT DISTINCT sensor_id FROM mqtt_logs WHERE mac_addr='{mac_addr}' and type='{type}'")
 
-    def getAllDataTest(self):
-        return self.dbConn.executeSQL("SELECT * FROM mqtt_logs")
-
     def getAllData(self):
         return self.dbConn.executeSQL("SELECT * FROM mqtt_logs")
-
-    def getTempData(self):
-        return self.dbConn.executeSQL("SELECT * FROM mqtt_logs WHERE type = 'temp'")
 
     def deleteAllData(self):
         return self.dbConn.executeSQL("DELETE FROM mqtt_logs WHERE log_id != -1")

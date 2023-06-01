@@ -1,6 +1,3 @@
-from typing import List
-
-from pydantic import BaseModel
 from MQTTDbConn import MQTTDbConn
 from fastapi import FastAPI
 import uvicorn
@@ -15,8 +12,8 @@ if __name__ == "__main__":
     mqttClient = MQTTDbConn("testdb", "192.168.100.10", 1883, "dev/#")
     # at school
     # mqttClient = MQTTDbConn("testdb", "10.1.4.177", 1883, "dev/#")
-    # mqttClient.start()
 
+    mqttClient.start()
     app = FastAPI()
 
 
