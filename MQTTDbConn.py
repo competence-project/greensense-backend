@@ -28,6 +28,7 @@ class MQTTDbConn(threading.Thread):
     def run(self):
         self.client.on_message = self.on_message
         self.client.on_publish = self.on_publish
+        self.client.username_pw_set("admin", "admin")
         self.client.connect(self.ipAddr, self.port, 60)
         print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topics dev/+/+/+...")
         for topic in self.topics:

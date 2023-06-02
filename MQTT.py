@@ -1,16 +1,16 @@
 from MQTTDbConn import MQTTDbConn
 from fastapi import FastAPI
 import uvicorn
+import sys
 
 if __name__ == "__main__":
     types = ['temp', 'illum', 'pssr', 'hum']
 
-    # loopback
     # mqttClient = MQTTDbConn("testdb", "127.0.0.1", 1883, "dev/#")
-    # at my own place
-    mqttClient = MQTTDbConn("testdb", "192.168.100.10", 1883, "dev/#")
-    # at school
-    # mqttClient = MQTTDbConn("testdb", "10.1.4.177", 1883, "dev/#")
+    # mqttClient = MQTTDbConn("testdb", "192.168.100.10", 1883, "dev/#")
+    # ip is given with args, if not use hardcoded value
+    ip = sys.argv[1] if sys.argv[1] is not None else "10.1.4.71"
+    mqttClient = MQTTDbConn("testdb", ip, 1883, "dev/#")
 
     mqttClient.start()
     app = FastAPI()
