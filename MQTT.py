@@ -114,12 +114,12 @@ if __name__ == "__main__":
 
     # endpoint returning data from for given sensor with given type as json
     @app.get("/data/{mac_addr}/{type}")
-    async def getDataByMacAndType(mac_addr, type):
+    async def getDataByMacAndType(mac_addr, sensorType):
         # list that is supposed to contain tuples with (mac, minimum timestamp, max timestamp)
         macAndTimestamps = []
 
         # prints mac_addr, min and max timestamps as well as appends them to list
-        for row in mqttClient.getTimestampsForMacAddressAndType(mac_addr, type):
+        for row in mqttClient.getTimestampsForMacAddressAndType(mac_addr, sensorType):
             macAndTimestamps = row
 
         if len(macAndTimestamps) < 1:
@@ -134,14 +134,14 @@ if __name__ == "__main__":
         data = []
         # gathering distinct ids of sub-sensors cuz only one cursor can be opened at once
         ids = []
-        for idTuple in mqttClient.getSubSensorsIdsByMacAddressAndType(macAndTimestamps[0], type):
+        for idTuple in mqttClient.getSubSensorsIdsByMacAddressAndType(macAndTimestamps[0], sensorType):
             ids.append(idTuple[0])
         # appending data from each sub-sensor with given type to return json
         for id in ids:
-            dataForType = {'name': type, 'id': id}
+            dataForType = {'name': sensorType, 'id': id}
             measurement_list = []
-            for mac_row in mqttClient.getDataByMacAndType(macAndTimestamps[0], type):
-                if mac_row[3] == type and mac_row[4] == id:
+            for mac_row in mqttClient.getDataByMacAndType(macAndTimestamps[0], sensorType):
+                if mac_row[3] == sensorType and mac_row[4] == id:
                     measurement_list.append({'datetime': mac_row[1], 'result': mac_row[5]})
             dataForType['measurement_list'] = measurement_list
             data.append(dataForType)
