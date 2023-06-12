@@ -9,8 +9,10 @@ if __name__ == "__main__":
     # mqttClient = MQTTDbConn("testdb", "127.0.0.1", 1883, "dev/#")
     # mqttClient = MQTTDbConn("testdb", "192.168.100.10", 1883, "dev/#")
     # ip is given with args, if not use hardcoded value
-    ip = sys.argv[1] if sys.argv[1] is not None else "10.1.4.71"
-    mqttClient = MQTTDbConn("testdb", ip, 1883, "dev/#")
+    ip = sys.argv[1] if len(sys.argv) >= 2 else "127.0.0.1"
+    username = sys.argv[2] if len(sys.argv) >= 3 else "admin"
+    password = sys.argv[3] if len(sys.argv) >= 4 else "admin"
+    mqttClient = MQTTDbConn("testdb", ip, 1883, "dev/#", username, password)
 
     mqttClient.start()
     app = FastAPI()

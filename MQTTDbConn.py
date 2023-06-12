@@ -16,7 +16,7 @@ import time
 # create table mqtt_logs (log_id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, mac_addr TEXT NOT NULL, type TEXT, sensor_id INTEGER, reading TEXT NOT NULL)
 
 class MQTTDbConn(threading.Thread):
-    def __init__(self, dbname, ipAddr, port, topics):
+    def __init__(self, dbname, ipAddr, port, topics, username, password):
         threading.Thread.__init__(self)
         self.dbName = dbname
         self.ipAddr = ipAddr
@@ -24,11 +24,13 @@ class MQTTDbConn(threading.Thread):
         self.topics = topics
         self.dbConn = Db.DbConnection(self.dbName)
         self.client = paho.Client()
+        self.username = username
+        self.password = password
 
     def run(self):
         self.client.on_message = self.on_message
         self.client.on_publish = self.on_publish
-        self.client.username_pw_set("admin", "admin")
+        self.client.username_pw_set(self.username, self.password)
         self.client.connect(self.ipAddr, self.port, 60)
         print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topics dev/+/+/+...")
         for topic in self.topics:
