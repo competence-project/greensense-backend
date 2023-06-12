@@ -1,9 +1,9 @@
-from MQTTDbConn import MQTTDbConn
+from greensense_backend.MQTTDbConn import MQTTDbConn
 from fastapi import FastAPI
 import uvicorn
 import sys
 
-if __name__ == "__main__":
+def start():
     types = ['temp', 'illum', 'pssr', 'hum']
 
     # mqttClient = MQTTDbConn("testdb", "127.0.0.1", 1883, "dev/#")
@@ -152,3 +152,7 @@ if __name__ == "__main__":
 
 
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
+if __name__ == "__main__":
+    start()

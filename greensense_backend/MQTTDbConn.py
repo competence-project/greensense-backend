@@ -1,5 +1,5 @@
 import paho.mqtt.client as paho
-import DbConnection as Db
+import greensense_backend.DbConnection as Db
 import threading
 import time
 
