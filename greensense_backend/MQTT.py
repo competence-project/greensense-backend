@@ -2,18 +2,26 @@ from greensense_backend.MQTTDbConn import MQTTDbConn
 from fastapi import FastAPI
 import uvicorn
 import sys
+import argparse
 
 def start():
     types = ['temp', 'illum', 'pssr', 'hum']
 
     # mqttClient = MQTTDbConn("testdb", "127.0.0.1", 1883, "dev/#")
     # mqttClient = MQTTDbConn("testdb", "192.168.100.10", 1883, "dev/#")
-    # ip is given with args, if not use hardcoded value
-    ip = sys.argv[1] if len(sys.argv) >= 2 else "127.0.0.1"
-    username = sys.argv[2] if len(sys.argv) >= 3 else "admin"
-    password = sys.argv[3] if len(sys.argv) >= 4 else "admin"
-    mqttClient = MQTTDbConn("testdb", ip, 1883, "dev/#", username, password)
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-bh', '--broker_host', help="Specify the broker host ip address", default="127.0.0.1")
+    parser.add_argument('-bp', '--broker_port', help="Specify the broker host port", default=1883)
+    parser.add_argument('-u', '--username', help="Specify the username", default="admin")
+    parser.add_argument('-p', '--password', help="Specify the password", default="admin")
+    parser.add_argument('-hi', '--host_interface', help="Specify desired http service host interface", default="0.0.0.0")
+    parser.add_argument('-hp', '--host_port', help="Specify desired http service host port", default=8080)
+
+    args = parser.parse_args()
+    print(args)
+    print(args.broker_host, args.broker_port, args.username, args.password, args.host_interface, args.host_port)
+    mqttClient = MQTTDbConn("testdb", args.broker_host, args.broker_port, "dev/#", args.username, args.password)
     mqttClient.start()
     app = FastAPI()
 
@@ -150,8 +158,7 @@ def start():
 
         return ret_data
 
-
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host=args.host_interface, port=args.host_port)
 
 
 if __name__ == "__main__":
