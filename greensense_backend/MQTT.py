@@ -12,11 +12,11 @@ def start():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-bh', '--broker-host', help="Specify the broker host ip address", default="127.0.0.1")
-    parser.add_argument('-bp', '--broker-port', help="Specify the broker host port", default=1883)
+    parser.add_argument('-bp', '--broker-port', help="Specify the broker host port", default=1883, type=int)
     parser.add_argument('-mu', '--mqtt-username', help="Specify the username", default="admin")
     parser.add_argument('-mp', '--mqtt-password', help="Specify the password", default="admin")
     parser.add_argument('-i', '--interface', help="Specify desired http service host interface", default="0.0.0.0")
-    parser.add_argument('-p', '--port', help="Specify desired http service host port", default=8080)
+    parser.add_argument('-p', '--port', help="Specify desired http service host port", default=8080, type=int)
 
     args = parser.parse_args()
     mqttClient = MQTTDbConn("greensense_db", args.broker_host, args.broker_port, "dev/#", args.mqtt_username, args.mqtt_password)
