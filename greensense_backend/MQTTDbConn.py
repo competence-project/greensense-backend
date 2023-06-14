@@ -35,8 +35,11 @@ class MQTTDbConn(threading.Thread):
         print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topic dev/#")
         for topic in self.topics:
             self.client.subscribe(topic, 0)
-        while self.client.loop() == 0:
-            pass
+
+        self.client.loop_start()
+
+    def kill(self):
+        self.client.loop_stop()
 
     def on_message(self, mosq, obj, msg):
         # topic standard is dev/{mac}/{type}/{id} so after split should be [0]=dev [1]=mac [2]=type [3]=id

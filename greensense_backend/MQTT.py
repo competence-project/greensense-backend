@@ -1,8 +1,8 @@
 from greensense_backend.MQTTDbConn import MQTTDbConn
 from fastapi import FastAPI
 import uvicorn
-import sys
 import argparse
+
 
 def start():
     types = ['temp', 'illum', 'pssr', 'hum']
@@ -19,10 +19,13 @@ def start():
     parser.add_argument('-p', '--port', help="Specify desired http service host port", default=8080)
 
     args = parser.parse_args()
-    mqttClient = MQTTDbConn("greensense_db", args.broker_host, args.broker_port, "dev/#", args.username, args.password)
+    mqttClient = MQTTDbConn("greensense_db", args.broker_host, args.broker_port, "dev/#", args.mqtt_username, args.mqtt_password)
     mqttClient.start()
     app = FastAPI()
 
+    @app.on_event("shutdown")
+    def shutdown_event():
+        mqttClient.kill()
 
     # sample, test endpoint
     @app.get("/")
@@ -156,7 +159,7 @@ def start():
 
         return ret_data
 
-    uvicorn.run(app, host=args.host_interface, port=args.host_port)
+    uvicorn.run(app, host=args.interface, port=args.port)
 
 
 if __name__ == "__main__":
