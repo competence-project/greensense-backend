@@ -12,7 +12,7 @@ def start():
     ip = sys.argv[1] if len(sys.argv) >= 2 else "127.0.0.1"
     username = sys.argv[2] if len(sys.argv) >= 3 else "admin"
     password = sys.argv[3] if len(sys.argv) >= 4 else "admin"
-    mqttClient = MQTTDbConn("testdb", ip, 1883, "dev/#", username, password)
+    mqttClient = MQTTDbConn("greensense_db", ip, 1883, "dev/#", username, password)
 
     mqttClient.start()
     app = FastAPI()

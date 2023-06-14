@@ -8,7 +8,7 @@ setup(
     author='Mikołaj Rajczyk',
     author_email='mikolajrajczyk01@gmail.com',
     packages=['greensense_backend'],
-    install_requires=['paho.mqtt',
+    install_requires=['paho-mqtt',
                       'fastapi',
                       'uvicorn',
                       ],

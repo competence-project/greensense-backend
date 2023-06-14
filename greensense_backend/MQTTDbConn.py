@@ -32,7 +32,7 @@ class MQTTDbConn(threading.Thread):
         self.client.on_publish = self.on_publish
         self.client.username_pw_set(self.username, self.password)
         self.client.connect(self.ipAddr, self.port, 60)
-        print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topics dev/+/+/+...")
+        print(f"Connection with {self.ipAddr}:{self.port} successfull, listening on topic dev/#")
         for topic in self.topics:
             self.client.subscribe(topic, 0)
         while self.client.loop() == 0:
