@@ -19,8 +19,6 @@ def start():
     parser.add_argument('-hp', '--host_port', help="Specify desired http service host port", default=8080)
 
     args = parser.parse_args()
-    print(args)
-    print(args.broker_host, args.broker_port, args.username, args.password, args.host_interface, args.host_port)
     mqttClient = MQTTDbConn("testdb", args.broker_host, args.broker_port, "dev/#", args.username, args.password)
     mqttClient.start()
     app = FastAPI()
