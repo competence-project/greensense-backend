@@ -67,6 +67,9 @@ class MQTTDbConn(threading.Thread):
     def getAllDataByMac(self, mac_addr):
         return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}'")
 
+    def getDataByMacAndTimestamps(self, mac_addr, timestamp_from, timestamp_to):
+        return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}' and timestamp > {timestamp_from} and timestamp < {timestamp_to}")
+
     def getDataByMacAndType(self, mac_addr, type):
         return self.dbConn.executeSQL(f"SELECT * FROM mqtt_logs WHERE mac_addr='{mac_addr}' and type='{type}'")
 

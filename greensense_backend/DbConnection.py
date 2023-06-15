@@ -14,7 +14,7 @@ class DbConnection:
         elif platform.system() == "Windows":
             new_dir_path = os.path.join(home_path, "AppData", "Roaming", directory)
         else:
-            new_dir_path = os.path.join(home_path, directory)  #such case will exist???? :O
+            new_dir_path = os.path.join(home_path, directory)
 
         if not os.path.exists(new_dir_path):
             os.mkdir(new_dir_path, mode=0o777)

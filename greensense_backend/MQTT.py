@@ -60,29 +60,29 @@ def start():
             # first append min, max datetime for each sensor, assign timezone offset and specify sub-sensor Id
             tmp_dict = {'datetime': {'from': mac[1], 'to': mac[2], 'timezone_offset': 7200},
                         'sensor': {"mac_address": mac[0]}}
-            data = []
             for measurementType in types:
+                data = []
                 # gathering distinct ids of sub-sensors cuz only one cursor can be opened at once
                 ids = []
                 for idTuple in mqttClient.getSubSensorsIdsByMacAddressAndType(mac[0], measurementType):
                     ids.append(idTuple[0])
                 # appending data from each sub-sensor with given type to return json
                 for id in ids:
-                    dataForType = {'name': measurementType, 'id': id}
+                    dataForType = {'id': id}
                     measurement_list = []
-                    for mac_row in mqttClient.getAllDataByMac(mac[0]):
-                        if mac_row[3] == measurementType and mac_row[4] == id:
+                    for mac_row in mqttClient.getDataByMacAndType(mac[0], measurementType):
+                        if mac_row[4] == id:
                             measurement_list.append({'datetime': mac_row[1], 'result': mac_row[5]})
                     dataForType['measurement_list'] = measurement_list
                     data.append(dataForType)
-            tmp_dict['data'] = data
+                tmp_dict[measurementType] = data
             ret_data.append(tmp_dict)
 
         return ret_data
 
 
     # endpoint returning data for given sensor as json
-    @app.get("/data/{mac_addr}")
+    @app.get("/data/mac/{mac_addr}")
     async def getDataByMac(mac_addr):
         # list that is supposed to contain tuples with (mac, minimum timestamp, max timestamp)
         macAndTimestamps = []
@@ -100,29 +100,29 @@ def start():
         # first append min, max datetime for each sensor, assign timezone offset and specify sub-sensor Id
         tmp_dict = {'datetime': {'from': macAndTimestamps[1], 'to': macAndTimestamps[2], 'timezone_offset': 7200},
                     'sensor': {"mac_address": macAndTimestamps[0]}}
-        data = []
         for measurementType in types:
+            data = []
             # gathering distinct ids of sub-sensors cuz only one cursor can be opened at once
             ids = []
             for idTuple in mqttClient.getSubSensorsIdsByMacAddressAndType(macAndTimestamps[0], measurementType):
                 ids.append(idTuple[0])
             # appending data from each sub-sensor with given type to return json
             for id in ids:
-                dataForType = {'name': measurementType, 'id': id}
+                dataForType = {'id': id}
                 measurement_list = []
-                for mac_row in mqttClient.getDataByMacAddress(macAndTimestamps[0]):
-                    if mac_row[3] == measurementType and mac_row[4] == id:
+                for mac_row in mqttClient.getDataByMacAndType(macAndTimestamps[0], measurementType):
+                    if mac_row[4] == id:
                         measurement_list.append({'datetime': mac_row[1], 'result': mac_row[5]})
                 dataForType['measurement_list'] = measurement_list
                 data.append(dataForType)
-        tmp_dict['data'] = data
+            tmp_dict[measurementType] = data
         ret_data.append(tmp_dict)
 
         return ret_data
 
 
     # endpoint returning data from for given sensor with given type as json
-    @app.get("/data/{mac_addr}/{type}")
+    @app.get("/data/mac/{mac_addr}/type/{sensorType}")
     async def getDataByMacAndType(mac_addr, sensorType):
         # list that is supposed to contain tuples with (mac, minimum timestamp, max timestamp)
         macAndTimestamps = []
@@ -147,14 +147,14 @@ def start():
             ids.append(idTuple[0])
         # appending data from each sub-sensor with given type to return json
         for id in ids:
-            dataForType = {'name': sensorType, 'id': id}
+            dataForType = {'id': id}
             measurement_list = []
             for mac_row in mqttClient.getDataByMacAndType(macAndTimestamps[0], sensorType):
                 if mac_row[3] == sensorType and mac_row[4] == id:
                     measurement_list.append({'datetime': mac_row[1], 'result': mac_row[5]})
             dataForType['measurement_list'] = measurement_list
             data.append(dataForType)
-        tmp_dict['data'] = data
+        tmp_dict[sensorType] = data
         ret_data.append(tmp_dict)
 
         return ret_data
