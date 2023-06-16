@@ -1,5 +1,5 @@
 from greensense_backend.MQTTDbConn import MQTTDbConn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import uvicorn
 import argparse
 
@@ -124,6 +124,10 @@ def start():
     # endpoint returning data from for given sensor with given type as json
     @app.get("/data/mac/{mac_addr}/type/{sensorType}")
     async def getDataByMacAndType(mac_addr, sensorType):
+        try:
+            types.index(sensorType)
+        except ValueError:
+            raise HTTPException(status_code=422, detail="Incorrect type")
         # list that is supposed to contain tuples with (mac, minimum timestamp, max timestamp)
         macAndTimestamps = []
 
