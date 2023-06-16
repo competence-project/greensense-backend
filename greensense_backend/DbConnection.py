@@ -19,9 +19,8 @@ class DbConnection:
         if not os.path.exists(new_dir_path):
             os.mkdir(new_dir_path, mode=0o777)
 
-        self.conn = sqlite3.connect(os.path.join(new_dir_path, database), check_same_thread=False)
-
         try:
+            self.conn = sqlite3.connect(os.path.join(new_dir_path, database), check_same_thread=False)
             self.cur = self.conn.cursor()
             print(f"Connected to db {os.path.join(new_dir_path, database)}")
             self.cur.execute("create table if not exists mqtt_logs (log_id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, mac_addr TEXT NOT NULL, type TEXT, sensor_id INTEGER, reading TEXT NOT NULL)")
