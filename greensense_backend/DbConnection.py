@@ -20,8 +20,13 @@ class DbConnection:
             os.mkdir(new_dir_path, mode=0o777)
 
         self.conn = sqlite3.connect(os.path.join(new_dir_path, database), check_same_thread=False)
-        self.cur = self.conn.cursor()
-        self.cur.execute("create table if not exists mqtt_logs (log_id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, mac_addr TEXT NOT NULL, type TEXT, sensor_id INTEGER, reading TEXT NOT NULL)")
+
+        try:
+            self.cur = self.conn.cursor()
+            print(f"Connected to db {os.path.join(new_dir_path, database)}")
+            self.cur.execute("create table if not exists mqtt_logs (log_id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp INTEGER NOT NULL, mac_addr TEXT NOT NULL, type TEXT, sensor_id INTEGER, reading TEXT NOT NULL)")
+        except Exception as ex:
+            print(f"Could not connect to db {os.path.join(new_dir_path, database)}")
 
     def executeSQL(self, expression, *args):
         if len(args) > 0:
